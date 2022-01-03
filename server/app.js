@@ -1,5 +1,3 @@
-// CloudPAD - Cloud Personal Accessible Drive
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -13,15 +11,11 @@ app.use(bodyParser.json());
 app.use(cors())
 app.use(morgan("combined"))
 
-// Routes
+// APIs
+const Authentication = require('./api/Authentication');
 
-
-app.get('/', (req, res) => {
-  res.send({
-    respond: "bruhwtf"
-  })
-})
+app.use("/", Authentication);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`app listening at http://localhost:${port}`)
 })
