@@ -2,7 +2,7 @@
     <v-list dense>
         <v-list-item-group
             v-model="selectedItem"
-            color="primary"
+            color="secondary"
         >
             <v-list-item
                 v-for="(item, i) in items"
