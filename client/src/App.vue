@@ -1,85 +1,60 @@
 <template>
-  <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
-    </v-navigation-drawer>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-      <v-spacer></v-spacer>
-      <v-menu
-        bottom
-        left
-        transition="scroll-y-reverse-transition"
+  <v-theme-provider root>
+    <v-app>
+      <v-navigation-drawer
+        v-model="drawer"
+        app
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            dark
-            icon
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-app-bar>
+        <SideMenuList/>
+      </v-navigation-drawer>
+      <v-app-bar
+        app
+        color="primary"
+        dark
+      >
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <h1>CloudPAD</h1>
+        <v-spacer></v-spacer>
+        <v-switch
+          v-model="$vuetify.theme.dark"
+          color="secondary"
+          class="mt-6"
+        ></v-switch>
+        <v-icon
+          color="light"
+        >
+          mdi-brightness-6
+        </v-icon>
+        <UserMenuList/>
+      </v-app-bar>
 
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+      <v-main>
+        <router-view></router-view>
+      </v-main>
+    </v-app>
+  </v-theme-provider>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+  import UserMenuList from '@/components/UserMenuList.vue'
+  import SideMenuList from '@/components/SideMenuList.vue'
 
-export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    drawer: false,
-    items: [
-      { title: 'Click Me 1' },
-      { title: 'Click Me 2' },
-      { title: 'Click Me 3' },
-      { title: 'Click Me 4' },
-    ],
-  }),
-};
+  export default {
+    name: 'App',
+    components: {
+      UserMenuList,
+      SideMenuList
+    },
+    data: () => ({
+      drawer: false,
+      items: [
+        { title: 'Click Me 1' },
+        { title: 'Click Me 2' },
+        { title: 'Click Me 3' },
+        { title: 'Click Me 4' },
+      ],
+    }),
+  };
 </script>
+
+
