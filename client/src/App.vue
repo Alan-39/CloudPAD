@@ -15,13 +15,10 @@
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
         <h1>CloudPAD</h1>
         <v-spacer></v-spacer>
-        <v-switch
-          v-model="$vuetify.theme.dark"
-          color="secondary"
-          class="mt-6"
-        ></v-switch>
         <v-icon
           color="light"
+          @click="toggleTheme"
+
         >
           mdi-brightness-6
         </v-icon>
@@ -54,6 +51,22 @@
         { title: 'Click Me 4' },
       ],
     }),
+    mounted() {
+      const theme = localStorage.getItem("dark-theme");
+      if (theme) {
+          if (theme == "true") {
+              this.$vuetify.theme.dark = true;
+          } else {
+              this.$vuetify.theme.dark = false;
+          }
+      }
+    },
+    methods: {
+      toggleTheme() {
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+        localStorage.setItem("dark-theme", this.$vuetify.theme.dark.toString());
+      }
+    }
   };
 </script>
 
