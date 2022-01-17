@@ -20,14 +20,14 @@ passport.use(
         User.findOne({ username: username })
         .then(user => {
             if (!user) {
-                return done(null, false, { message: "Incorrect username or password." });
+                return done(null, false, res.send({ message: "Incorrect username or password." }));
             } else {
                 bcrypt.compare(password, user.password, (err, isMatch) => {
                     if (err) throw err;
                     if (isMatch) {
                         return done(null, user);
                     } else {
-                        return done(null, false, { message: "Incorrect username or password." });
+                        return done(null, false, res.send({ message: "Incorrect username or password." }));
                     }
                 });
             }
