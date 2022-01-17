@@ -1,14 +1,23 @@
 <template>
   <v-container fluid fill-height>
     <v-row class="text-center">
-      <v-col>
+      <v-col align="center">
+        <div
+          v-if="showError == true"
+        >
+          <ErrorMsg 
+            v-bind:message="errMessage"
+            maxWidth="450"
+          />
+        </div>
         <v-card
           class="mx-auto"
           max-width="450"
           outlined
           elevation="3"
-          :loading="loading"
+          v-bind:loading="loading"
         >
+
           <template slot="progress">
             <v-progress-linear
               height="4"
@@ -65,13 +74,19 @@
 
 <script>
   import AuthenticationService from '@/services/AuthenticationService'
+  import ErrorMsg from '@/components/ErrorMsg.vue'
 
   export default {
+    components: {
+      ErrorMsg,
+    },
+
     data: () => ({
       username: '',
       password: '',
       loading: false,
-
+      showError: false,
+      errMessage: '',
     }),
 
     methods: {
@@ -82,7 +97,8 @@
           password: this.password
         })
         this.loading = false
-        console.log(response.data)
+        this.showError = true
+        this.errMessage = response.data.message
       },
     },
   }

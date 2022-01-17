@@ -1,7 +1,15 @@
 <template>
   <v-container fluid fill-height>
     <v-row class="text-center">
-      <v-col>
+      <v-col align="center">
+        <div
+          v-if="showError == true"
+        >
+          <ErrorMsg 
+            v-bind:message="errMessage"
+            maxWidth="450"
+          />
+        </div>
         <v-card
           class="mx-auto"
           max-width="450"
@@ -66,6 +74,7 @@
               </v-btn>
             </v-card-actions>
           </router-link>
+          <div class="error" v-html="error" />
         </v-card>
       </v-col>
     </v-row>
@@ -73,12 +82,37 @@
 </template>
 
 <script>
+  import AuthenticationService from '@/services/AuthenticationService.js'
+  import ErrorMsg from '@/components/ErrorMsg.vue'
+
   export default {
+    components: {
+      ErrorMsg,
+    },
+
     data: () => ({
       username: '',
       password: '',
-      inviteCode: '',
-      loading: false
+      repassword: '',
+      invitecode: '',
+      error: null,
+      loading: false,
+      showError: false,
+      errMessage: '',
     }),
+    methods: {
+      async register() {
+        try {
+          const response = await AuthenticationService.register({
+            username: this.username,
+            password: this.password
+          })
+          this.showError = true 
+          this.errMessage = response.data.message
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    }
   }
 </script>
