@@ -44,12 +44,6 @@
     },
     data: () => ({
       drawer: false,
-      items: [
-        { title: 'Click Me 1' },
-        { title: 'Click Me 2' },
-        { title: 'Click Me 3' },
-        { title: 'Click Me 4' },
-      ],
     }),
     mounted() {
       const theme = localStorage.getItem("dark-theme");
