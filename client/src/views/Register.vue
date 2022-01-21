@@ -23,7 +23,8 @@
               indeterminate
             ></v-progress-linear>
           </template>
-
+          
+          <h2 class="mt-4">CloudPAD</h2>
           <form>
             <v-card-text>
               <v-text-field
@@ -61,7 +62,7 @@
           </form>
           <v-divider class="mx-4 my-2"></v-divider>
           <router-link 
-            to="/"
+            to="/login"
             style="text-decoration: none"
           >
             <v-card-actions>
