@@ -26,16 +26,29 @@ require("dotenv").config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  exposedHeaders: ['set-cookie'],
+  origin: [
+    'http://localhost:8080', 
+    'https://localhost:8080'
+  ],
+}));
 app.use(morgan("combined"));
 app.use(session({
   secret: 'das sum very secretive secret bruh',
+  cookie: {
+    maxAge: 600000,
+    secure: false // for testing only, HTTPS required
+  },
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
+  unset: 'destroy',
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // APIs
 const Authentication = require('./api/Authentication');
