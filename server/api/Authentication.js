@@ -28,11 +28,34 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res, next) => {
-	passport.authenticate("local", {
-            successRedirect: "/success",
-            failureRedirect: "/failure",
-            failureFlash: false,
-	})(req, res, next);
+	passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        
+        if (!user) {
+            return res.status(403).send(info.message);
+        }
+        req.login(user, err => {
+            console.log(info.message)
+            res.send(info.message);
+        });
+    })(req, res, next);
+});
+
+router.get("/logout", (req, res) => {
+    console.log(`${req.user}\nhas logged out`)
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid', { path: '/' }).status(200).send();
+    })
+});
+
+router.get('/checkAuth', (req, res, next) => {
+    console.log(`Logged in as\n${req.user}`);
+    if (req.isAuthenticated()) { 
+        return res.status(200).send() 
+    }
+    res.status(401).send()
 });
 
 module.exports = router;
