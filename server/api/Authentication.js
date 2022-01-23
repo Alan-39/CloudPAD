@@ -53,9 +53,11 @@ router.get("/logout", (req, res) => {
 router.get('/checkAuth', (req, res, next) => {
     console.log(`Logged in as\n${req.user}`);
     if (req.isAuthenticated()) { 
-        return res.status(200).send() 
+        return res.status(200).json(req.session)
     }
-    res.status(401).send()
+    else {
+        return res.status(401).send()
+    }
 });
 
 module.exports = router;

@@ -28,9 +28,14 @@ const router = new VueRouter({
     ],
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
-        await AuthenticationService.checkAuth()
+        AuthenticationService.checkAuth()
+        .then(response => {
+            if (response.status === 200) {
+                next()
+            }
+        })
         .catch(error => {
             console.log(error)
             next({ path: 'login' })
