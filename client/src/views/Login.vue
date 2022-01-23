@@ -91,25 +91,24 @@
     }),
 
     methods: {
-      async login () {
-        try {
-          this.loading = true
-          const response = await AuthenticationService.login({
-            username: this.username,
-            password: this.password
-          })
-
-          if (response.status === 200) {
+      login () {
+        this.loading = true
+        AuthenticationService.login({
+          username: this.username,
+          password: this.password
+        })
+        .then(res => {
+          if (res.status === 200) {
             this.loading = false
             this.$router.push('/')
           }
-        }
-        catch (error) {
+        })
+        .catch(error => {
           this.loading = false
           this.showError = true
           this.errMessage = 'Something went wrong'
           console.error(error)
-        }
+        })
       }
     },
   }

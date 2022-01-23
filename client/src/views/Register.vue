@@ -103,16 +103,17 @@
     }),
     methods: {
       async register() {
-        try {
-          const response = await AuthenticationService.register({
-            username: this.username,
-            password: this.password
-          })
+        AuthenticationService.register({
+          username: this.username,
+          password: this.password  
+        })
+        .then(res => {
           this.showError = true 
-          this.errMessage = response.data.message
-        } catch (err) {
-          console.log(err)
-        }
+          this.errMessage = res.data.message
+        })
+        .catch(error => {
+          console.log(error)
+        })
       }
     }
   }

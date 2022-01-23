@@ -40,8 +40,8 @@
     }),
 
     methods: {
-      async logout() {
-        await AuthenticationService.logout();
+      logout() {
+        AuthenticationService.logout();
       }
     }
   };
