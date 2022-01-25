@@ -1,6 +1,6 @@
 <template>
     <v-alert
-        v-bind:type="messageType"
+        type="error"
         v-bind:max-width="maxWidth"
         dismissible
     >
@@ -10,6 +10,6 @@
 
 <script>
     export default {
-        props: ['message', 'maxWidth', 'messageType']
+        props: ['message', 'maxWidth']
     }
 </script>

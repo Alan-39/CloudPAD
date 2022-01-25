@@ -4,22 +4,9 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 router.post('/register', (req, res) => {
-    if (req.body.password != req.body.repassword) {
-        res.send({ status: "error", message: "Passwords did not much." });
-    }
-    if (req.body.password.length < 8) {
-        res.send({ status: "error", message: "Password requires 8 or more characters" });
-    }
-    if (!/\d/.test(req.body.password)) {
-        res.send({ status: "error", message: "Password requires at least 1 number" });
-    }
-    if (/[^a-zA-Z0-9]/.test(req.body.password)) {
-        res.send({ status: "error", message: "Password cannot contain special characters" });
-    }
-    console.log("sanitization checked")
     User.findOne({ username: req.body.username })
     .then(user => {
-        if (user) { res.send({ status: "error", message: "User is already registered." }) }
+        if (user) { res.send({ message: "User is already registered." }) }
         else {
             let newUser = User({ username: req.body.username, password: req.body.password });
             bcrypt.genSalt(10, (err, salt) => {
@@ -27,7 +14,7 @@ router.post('/register', (req, res) => {
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        { res.send({ status: "success", message: "New user created." }) }
+                        { res.send({ message: "New user created." }) }
                         console.log(user);
                     })
                     .catch(err => {
@@ -45,11 +32,13 @@ router.post('/login', (req, res, next) => {
         if (err) {
             return next(err);
         }
+        
         if (!user) {
-            return res.send(info);
+            return res.status(403).send(info.message);
         }
         req.login(user, err => {
-            res.send(info);
+            console.log(info.message)
+            res.send(info.message);
         });
     })(req, res, next);
 });

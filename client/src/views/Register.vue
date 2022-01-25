@@ -3,11 +3,10 @@
     <v-row class="text-center">
       <v-col align="center">
         <div
-          v-if="showAlert == true"
+          v-if="showError == true"
         >
-          <AlertMsg 
-            v-bind:messageType="messageType"
-            v-bind:message="alertMessage"
+          <ErrorMsg 
+            v-bind:message="errMessage"
             maxWidth="450"
           />
         </div>
@@ -85,11 +84,11 @@
 
 <script>
   import AuthenticationService from '@/services/AuthenticationService.js'
-  import AlertMsg from '@/components/AlertMsg.vue'
+  import ErrorMsg from '@/components/ErrorMsg.vue'
 
   export default {
     components: {
-      AlertMsg,
+      ErrorMsg,
     },
 
     data: () => ({
@@ -99,28 +98,18 @@
       invitecode: '',
       error: null,
       loading: false,
-      showAlert: false,
-      messageType: '',
-      alertMessage: '',
+      showError: false,
+      errMessage: '',
     }),
     methods: {
-      register() {
+      async register() {
         AuthenticationService.register({
           username: this.username,
-          password: this.password,
-          repassword: this.repassword,
+          password: this.password  
         })
         .then(res => {
-          if (res.data.status == "success") {
-            this.messageType = res.data.status
-            this.showAlert = true 
-            this.alertMessage = res.data.message
-          }
-          if (res.data.status == "error") {
-            this.messageType = res.data.status
-            this.showAlert = true 
-            this.alertMessage = res.data.message
-          }
+          this.showError = true 
+          this.errMessage = res.data.message
         })
         .catch(error => {
           console.log(error)
