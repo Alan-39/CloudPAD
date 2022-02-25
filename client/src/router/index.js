@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/views/Home.vue'
+import MyDrive from '@/views/MyDrive.vue'
+import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import UploadTest from '@/views/UploadTest.vue'
 import AuthenticationService from '@/services/AuthenticationService'
+
 
 Vue.use(VueRouter);
 
@@ -12,18 +15,35 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            component: Home,
+            component: MyDrive,
             meta: {
                 requiresAuth: true
             }
         },
         {
+            path: '*',
+            component: NotFound,
+            meta: {
+                hideNavigation: true
+            }
+        },
+        {
             path: '/login',
             component: Login,
+            meta: {
+                hideNavigation: true
+            }
         },
         {
             path: '/register',
             component: Register,
+            meta: {
+                hideNavigation: true
+            }
+        },
+        {
+            path: '/file-upload',
+            component: UploadTest,
         },
     ],
 });

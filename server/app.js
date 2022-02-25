@@ -8,11 +8,11 @@ const port = 3000
 const db = require('./config/dbConnection');
 
 db.once('open', () => {
-  console.log("Connection successful")
+  console.log("Connection successful");
 });
 db.on('error', err => {
-  console.log(err)
-})
+  console.log(err.message);
+});
 
 
 // Middleware
@@ -52,10 +52,12 @@ app.use(passport.session());
 
 // APIs
 const Authentication = require('./api/Authentication');
+const MinIO = require('./api/MinIO');
 
-app.use("/", Authentication);
+app.use("/auth", Authentication);
+app.use("/minio", MinIO);
 
 
 app.listen(port, () => {
-  console.log(`app listening at http://localhost:${port}`)
+  console.log(`Server listening at http://localhost:${port}`)
 })

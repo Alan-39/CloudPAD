@@ -1,30 +1,38 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      <v-navigation-drawer
-        v-model="drawer"
-        app
-      >
-        <SideMenuList/>
-      </v-navigation-drawer>
-      <v-app-bar
-        app
-        color="primary"
-        dark
-      >
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <h1>CloudPAD</h1>
-        <v-spacer></v-spacer>
-        <v-icon
-          color="light"
-          @click="toggleTheme"
-
+      <div v-if="!$route.meta.hideNavigation">
+        <v-navigation-drawer
+          v-model="drawer"
+          app
         >
-          mdi-brightness-6
-        </v-icon>
-        <UserMenuList/>
-      </v-app-bar>
+          <SideMenuList/>
+        </v-navigation-drawer>
+        <v-app-bar
+          app
+          color="primary"
+          dark
+        >
+          <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+          <h1>
+            <router-link 
+              to="/"
+              style="text-decoration: none; color: white;"
+            >
+              CloudPAD
+            </router-link>
+          </h1>
+          <v-spacer></v-spacer>
+          <v-icon
+            color="light"
+            @click="toggleTheme"
 
+          >
+            mdi-brightness-6
+          </v-icon>
+          <UserMenuList/>
+        </v-app-bar>
+      </div>
       <v-main>
         <router-view></router-view>
       </v-main>
@@ -43,7 +51,7 @@
       SideMenuList
     },
     data: () => ({
-      drawer: false,
+      drawer: true,
     }),
     mounted() {
       const theme = localStorage.getItem("dark-theme");

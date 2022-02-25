@@ -14,19 +14,17 @@
         </v-btn>
         </template>
         <v-list>
-            <v-list-item
-            >
-              <router-link 
-                to="/login"
-                style="text-decoration: none"
-              >
-                <v-list-item-title
+          <v-list-item-group
+            color="secondary"
+          >
+            <v-list-item>
+              <v-list-item-content
                 @click="logout"
-                >
-                  Log out
-                </v-list-item-title>
-              </router-link>
+              >
+                <v-list-item-title>Log out</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
+          </v-list-item-group>
         </v-list>
     </v-menu>
 </template>
@@ -42,6 +40,7 @@
     methods: {
       logout() {
         AuthenticationService.logout();
+        this.$router.push('/login')
       }
     }
   };

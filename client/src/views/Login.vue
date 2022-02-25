@@ -26,7 +26,7 @@
           </template>
           
           <h2 class="mt-4">CloudPAD</h2>
-          <form>
+          <v-form @submit.prevent="login">
             <v-card-text>
               <v-text-field
                 type="text"
@@ -45,12 +45,12 @@
                 block
                 depressed
                 color="secondary"
-                @click="login"
+                type="submit"
               >
                 Login
               </v-btn>
             </v-card-actions>
-          </form>
+          </v-form>
           <v-divider class="mx-4 my-2"></v-divider>
           <router-link 
             to="/register"
@@ -98,10 +98,23 @@
           password: this.password
         })
         .then(res => {
+<<<<<<< Updated upstream
           if (res.status === 200) {
             this.loading = false
             this.$router.push('/')
           }
+=======
+          this.loading = false
+          if (res.data.success == true) {
+            this.$router.push('/')
+          }
+          if (res.data.success == false) {
+            this.messageType = "error"
+            this.showAlert = true
+            this.alertMessage = res.data.message;
+            console.log("bruh", res.data.message);
+          }
+>>>>>>> Stashed changes
         })
         .catch(error => {
           this.loading = false

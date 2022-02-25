@@ -9,7 +9,10 @@
                 :key="i"
                 >
                 <v-list-item-content>
-                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                    <v-list-item-title 
+                        v-text="item.text"
+                        @click="redirect(item.path)"
+                    ></v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </v-list-item-group>
@@ -21,10 +24,16 @@
         data: () => ({
             selectedItem: 0,
             items: [
-                { text: 'My Drives' },
-                { text: 'Photos' },
-                { text: 'Videos'},
+                { text: 'Drive', path: "/" },
+                { text: 'Photos', path: "/photos" },
+                { text: 'Videos', path: "/videos" },
             ],
         }),
+
+        methods: {
+            redirect(path) {
+                this.$router.push(path)
+            }
+        }
     }
 </script>
