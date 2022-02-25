@@ -3,10 +3,11 @@
     <v-row class="text-center">
       <v-col align="center">
         <div
-          v-if="showError == true"
+          v-if="showAlert == true"
         >
-          <ErrorMsg 
-            v-bind:message="errMessage"
+          <AlertMsg 
+            v-bind:messageType="messageType"
+            v-bind:message="alertMessage"
             maxWidth="450"
           />
         </div>
@@ -75,19 +76,20 @@
 
 <script>
   import AuthenticationService from '@/services/AuthenticationService'
-  import ErrorMsg from '@/components/ErrorMsg.vue'
+  import AlertMsg from '@/components/AlertMsg.vue'
 
   export default {
     components: {
-      ErrorMsg,
+      AlertMsg,
     },
 
     data: () => ({
       username: '',
       password: '',
       loading: false,
-      showError: false,
-      errMessage: '',
+      showAlert: false,
+      messageType: '',
+      alertMessage: '',
     }),
 
     methods: {
@@ -105,14 +107,10 @@
           if (res.data.success == false) {
             this.messageType = "error"
             this.showAlert = true
-            this.alertMessage = res.data.message;
-            console.log("bruh", res.data.message);
+            this.alertMessage = res.data.message
           }
         })
         .catch(error => {
-          this.loading = false
-          this.showError = true
-          this.errMessage = 'Something went wrong'
           console.error(error)
         })
       }

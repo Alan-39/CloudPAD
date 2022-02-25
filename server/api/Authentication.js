@@ -4,6 +4,19 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 router.post('/register', (req, res) => {
+    if (req.body.password != req.body.repassword) {
+        res.send({ success: false, message: "Passwords did not much." });
+    }
+    if (req.body.password.length < 8) {
+        res.send({ success: false, message: "Password requires 8 or more characters" });
+    }
+    if (!/\d/.test(req.body.password)) {
+        res.send({ success: false, message: "Password requires at least 1 number" });
+    }
+    if (/[^a-zA-Z0-9]/.test(req.body.password)) {
+        res.send({ success: false, message: "Password cannot contain special characters" });
+    }
+    console.log("sanitization checked")
     User.findOne({ username: req.body.username })
     .then(user => {
         if (user) { res.send({ success: false, message: "User is already registered." }) }
@@ -34,11 +47,10 @@ router.post('/login', (req, res, next) => {
         }
         
         if (!user) {
-            return res.status(403).send(info.message);
+            return res.send(info);
         }
         req.login(user, err => {
-            console.log(info.message)
-            res.send(info.message);
+            res.send(info);
         });
     })(req, res, next);
 });
