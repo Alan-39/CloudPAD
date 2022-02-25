@@ -6,7 +6,7 @@ const User = require('../models/User');
 router.post('/register', (req, res) => {
     User.findOne({ username: req.body.username })
     .then(user => {
-        if (user) { res.send({ message: "User is already registered." }) }
+        if (user) { res.send({ success: false, message: "User is already registered." }) }
         else {
             let newUser = User({ username: req.body.username, password: req.body.password });
             bcrypt.genSalt(10, (err, salt) => {
@@ -14,7 +14,7 @@ router.post('/register', (req, res) => {
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        { res.send({ message: "New user created." }) }
+                        { res.send({ success: true,  message: "New user created." }) }
                         console.log(user);
                     })
                     .catch(err => {

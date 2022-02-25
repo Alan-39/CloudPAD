@@ -98,12 +98,6 @@
           password: this.password
         })
         .then(res => {
-<<<<<<< Updated upstream
-          if (res.status === 200) {
-            this.loading = false
-            this.$router.push('/')
-          }
-=======
           this.loading = false
           if (res.data.success == true) {
             this.$router.push('/')
@@ -114,7 +108,6 @@
             this.alertMessage = res.data.message;
             console.log("bruh", res.data.message);
           }
->>>>>>> Stashed changes
         })
         .catch(error => {
           this.loading = false

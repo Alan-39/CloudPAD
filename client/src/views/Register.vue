@@ -108,10 +108,6 @@
           password: this.password  
         })
         .then(res => {
-<<<<<<< Updated upstream
-          this.showError = true 
-          this.errMessage = res.data.message
-=======
           if (res.data.success == true) {
             this.messageType = "success"
             this.showAlert = true 
@@ -122,7 +118,6 @@
             this.showAlert = true 
             this.alertMessage = res.data.message
           }
->>>>>>> Stashed changes
         })
         .catch(error => {
           console.log(error)
