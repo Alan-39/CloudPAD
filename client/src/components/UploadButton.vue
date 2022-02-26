@@ -2,33 +2,40 @@
     <Transition name="slide-up">
         <v-btn
             elevation="4"
-            large
             v-if="uploadState === 'rest'"
-            @click="uploadState = 'uploading'"
+            large
+            @click="$refs.file.click()"
         >
-            <v-icon
-            color="light"
-            >
-                mdi-upload
-            </v-icon>
-                Upload
+            <form class="col-12" enctype="multipart/form-data">
+                <input
+                    style="display:none"
+                    type="file"
+                    accept="image/*"
+                    ref="file"
+                    @change="onFileSelected($event)"
+                />
+                    <v-icon
+                        color="light"
+                    >
+                        mdi-upload
+                    </v-icon>
+                    Upload
+            </form>
         </v-btn>
         <v-btn
             elevation="4"
             large
             v-else-if="uploadState === 'uploading'"
-            @click="uploadState = 'done'"
         >
             <v-progress-circular
-            indeterminate
-            color="green"
+                indeterminate
+                color="green"
             ></v-progress-circular>
         </v-btn>
         <v-btn 
             elevation="4"
             large
             v-else-if="uploadState === 'done'"
-            @click="uploadState = 'error'"
         >
             <v-icon
             color="light"
@@ -40,7 +47,6 @@
             elevation="4"
             large
             v-else-if="uploadState === 'error'"
-            @click="uploadState = 'rest'"
         >
             <v-icon
             color="light"
@@ -52,9 +58,36 @@
 </template>
 
 <script>
+    import UploadService from '@/services/UploadService'
+
     export default {
         data: () => ({
-            uploadState: "rest"
-        })
+            uploadState: "rest",
+            file: null,
+        }),
+
+        methods: {
+            onFileSelected(event) {
+                this.uploadState = "uploading"
+                this.file = event.target.files[0];
+                const fd = new FormData();
+
+                fd.append("file", this.file);
+
+                UploadService.upload(fd)
+                .then(res => {
+                    console.log(res);
+                    if (res.status == 200) {
+                        this.uploadState = "done"
+                        setTimeout(() => {
+                            this.uploadState = "rest"
+                        }, 2000)
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+
+            }
+        }
     }
 </script>

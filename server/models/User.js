@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
         password: {
             type: String,
         },
-        invite_code: {
+        bucket_name: {
             type: String
         }
     },

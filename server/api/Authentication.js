@@ -2,6 +2,8 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const uuidv4 = require('uuid').v4;
+const minioClient = require('../config/minioSetUp');
 
 router.post('/register', (req, res) => {
     if (req.body.password != req.body.repassword) {
@@ -21,14 +23,23 @@ router.post('/register', (req, res) => {
     .then(user => {
         if (user) { res.send({ success: false, message: "User is already registered." }) }
         else {
-            let newUser = User({ username: req.body.username, password: req.body.password });
+            const bucketName = uuidv4();
+            let newUser = User({ 
+                username: req.body.username, 
+                password: req.body.password,
+                bucket_name: bucketName,     
+            });
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        { res.send({ success: true,  message: "New user created." }) }
+                        minioClient.makeBucket(bucketName, err => {
+                            if (err) return console.log('Error creating bucket.', err)
+                            console.log('Bucket created successfully')
+                        })
                         console.log(user);
+                        { res.send({ success: true,  message: "New user created." }) }
                     })
                     .catch(err => {
                         console.log("Error");

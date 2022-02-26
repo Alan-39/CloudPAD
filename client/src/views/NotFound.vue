@@ -7,6 +7,7 @@
             width="300px"
             >
         </v-img>
+        <h1>404</h1>
         <h1>Uuuuf, this page doesn't exist</h1>
       </v-col>
     </v-row>
