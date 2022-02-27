@@ -19,6 +19,13 @@
           >
             <v-list-item>
               <v-list-item-content
+                @click="$router.push('/invite')"
+              >
+                <v-list-item-title>Invite Users</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content
                 @click="logout"
               >
                 <v-list-item-title>Log out</v-list-item-title>

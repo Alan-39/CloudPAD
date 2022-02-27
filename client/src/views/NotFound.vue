@@ -11,6 +11,16 @@
         <h1>Uuuuf, this page doesn't exist</h1>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col align="center">
+        <v-btn 
+          @click="$router.back()"
+          color="primary"
+        >
+          Bring me back!@-@
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

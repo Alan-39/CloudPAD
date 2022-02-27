@@ -7,7 +7,6 @@ router.post('/upload', multer({ storage: multer.memoryStorage() }).single("file"
     .then(data => {
         console.log("upload success", data);
         res.send({ success: true, message: "Object uploaded!"});
-
     })
     .catch(err => { 
         console.log("Error uploading", err)

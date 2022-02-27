@@ -4,6 +4,7 @@ import MyDrive from '@/views/MyDrive.vue'
 import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import InviteUsers from '@/views/InviteUsers.vue'
 import AuthenticationService from '@/services/AuthenticationService'
 
 
@@ -24,6 +25,13 @@ const router = new VueRouter({
             component: NotFound,
             meta: {
                 hideNavigation: true
+            }
+        },
+        {
+            path: '/invite',
+            component: InviteUsers,
+            meta: {
+                requiresAuth: true,
             }
         },
         {
