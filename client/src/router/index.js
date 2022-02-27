@@ -4,7 +4,6 @@ import MyDrive from '@/views/MyDrive.vue'
 import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
-import UploadTest from '@/views/UploadTest.vue'
 import AuthenticationService from '@/services/AuthenticationService'
 
 
@@ -40,11 +39,7 @@ const router = new VueRouter({
             meta: {
                 hideNavigation: true
             }
-        },
-        {
-            path: '/file-upload',
-            component: UploadTest,
-        },
+        }
     ],
 });
 
