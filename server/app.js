@@ -50,6 +50,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+// Initializers
+const initAdminUser = require("./config/AdminAccSetUp");
+
+
 // APIs
 const Authentication = require('./api/Authentication');
 const MinIO = require('./api/MinIO');
