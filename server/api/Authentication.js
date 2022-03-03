@@ -21,33 +21,31 @@ router.post('/register', (req, res) => {
     console.log("sanitization checked")
     User.findOne({ username: req.body.username })
     .then(user => {
-        if (user) { res.send({ success: false, message: "User is already registered." }) }
-        else {
-            const bucketName = uuidv4();
-            let newUser = User({ 
-                username: req.body.username, 
-                password: req.body.password,
-                bucketName: bucketName,     
-            });
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    newUser.password = hash;
-                    newUser.save()
-                    .then(user => {
-                        minioClient.makeBucket(bucketName, err => {
-                            if (err) return console.log('Error creating bucket.', err)
-                            console.log('Bucket created successfully')
-                        })
-                        console.log(user);
-                        { res.send({ success: true,  message: "New user created." }) }
+        if (user) return res.send({ success: false, message: "User is already registered." })
+        const bucketName = uuidv4();
+        let newUser = User({ 
+            username: req.body.username, 
+            password: req.body.password,
+            bucketName: bucketName,     
+        });
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+                newUser.password = hash;
+                newUser.save()
+                .then(user => {
+                    minioClient.makeBucket(bucketName, err => {
+                        if (err) return console.log('Error creating bucket.', err)
+                        console.log('Bucket created successfully')
                     })
-                    .catch(err => {
-                        console.log("Error");
-                        console.log(err);
-                    })
+                    console.log(user);
+                    { res.send({ success: true,  message: "New user created." }) }
                 })
-            });
-        }
+                .catch(err => {
+                    console.log("Error");
+                    console.log(err);
+                })
+            })
+        });
     });
 });
 
@@ -61,6 +59,10 @@ router.post('/login', (req, res, next) => {
             return res.send(info);
         }
         req.login(user, err => {
+            if (user.isInitialCred == true) {
+                info.updatePwdRequire = true;
+                return res.send(info);
+            }
             res.send(info);
         });
     })(req, res, next);
@@ -71,6 +73,10 @@ router.get("/logout", (req, res) => {
     req.session.destroy(() => {
         res.clearCookie('connect.sid', { path: '/' }).status(200).send();
     })
+});
+
+router.post("/update", (req, res) => {
+
 });
 
 router.get('/checkAuth', (req, res, next) => {

@@ -101,6 +101,10 @@
         })
         .then(res => {
           this.loading = false
+          if (res.data.success == true && res.data.updatePwdRequire == true) {
+            this.$router.push('/changepassword')
+            console.log(res.data);
+          }
           if (res.data.success == true) {
             this.$router.push('/')
           }
