@@ -57,9 +57,11 @@ const initAdminUser = require("./config/AdminAccSetUp");
 // APIs
 const Authentication = require('./api/Authentication');
 const MinIO = require('./api/MinIO');
+const UserReferral = require('./api/UserReferral');
 
 app.use("/auth", Authentication);
 app.use("/minio", MinIO);
+app.use("/referral", UserReferral);
 
 
 app.listen(port, () => {
