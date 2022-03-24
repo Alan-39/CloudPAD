@@ -5,13 +5,14 @@
             color="secondary"
         >
             <v-list-item
-                v-for="(item, i) in items"
-                :key="i"
+                v-for="(item, idx) in items"
+                :key="idx"
+                @click="redirect(item.path)"
                 >
                 <v-list-item-content>
                     <v-list-item-title 
                         v-text="item.text"
-                        @click="redirect(item.path)"
+                        
                     ></v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
