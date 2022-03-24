@@ -20,17 +20,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>sdgsdfsdfvd</td>
-                            <td>null</td>
+                        <tr
+                            v-for="(code, idx) in codeList"
+                            :key="idx"
+                        >
+                            <td>{{ code._id }}</td>
+                            <td>{{ code.usedBy }}</td>
                             <td>
                                 <v-btn
                                     color="error"
+                                    @click="deleteCode(code._id, idx)"
                                 >
                                     Delete
                                 </v-btn>
                             </td>
                         </tr>
+
                     </tbody>
                 </v-simple-table>
             </v-col>
@@ -39,6 +44,7 @@
             <v-col align="center">
                 <v-btn
                     color="success"
+                    @click="generateCode()"
                 >
                     Generate Code
                 </v-btn>
@@ -48,4 +54,42 @@
 </template>
 
 <script>
+    import ReferralService from '@/services/ReferralService'
+
+    export default {
+        data: () => ({
+            codeList: null,
+        }),
+
+        created() {
+            ReferralService.getCodes()
+                .then(res => {
+                    this.codeList = res.data
+                })
+                .catch(err => console.log(err));
+        },
+
+        methods: {
+            generateCode() {
+                ReferralService.generateCode()
+                    .then(res => {
+                        this.codeList.push(res.data)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            },
+
+            deleteCode(code, arrayIndex) {
+                this.codeList.splice(arrayIndex, 1);
+                ReferralService.deleteCode({ _id: code })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            }
+        }
+    }
 </script>

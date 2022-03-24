@@ -102,11 +102,10 @@
         .then(res => {
           this.loading = false
           if (res.data.success == true && res.data.updatePwdRequire == true) {
-            this.$router.push('/changepassword')
-            console.log(res.data);
+            return this.$router.push('/updatepassword')
           }
           if (res.data.success == true) {
-            this.$router.push('/')
+            return this.$router.push('/')
           }
           if (res.data.success == false) {
             this.messageType = "error"

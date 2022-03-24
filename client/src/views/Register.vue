@@ -46,7 +46,7 @@
               <v-text-field
                 type="text"
                 label="Invite Code"
-                v-model="invitecode"
+                v-model="inviteCode"
               ></v-text-field>
             </v-card-text>
 
@@ -96,7 +96,7 @@
       username: '',
       password: '',
       repassword: '',
-      invitecode: '',
+      inviteCode: '',
       error: null,
       loading: false,
       showAlert: false,
@@ -109,6 +109,7 @@
           username: this.username,
           password: this.password,
           repassword: this.repassword,
+          inviteCode: this.inviteCode,
         })
         .then(res => {
           if (res.data.success == true) {

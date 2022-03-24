@@ -3,7 +3,7 @@
     <v-row class="text-center">
       <v-col align="center">
         <v-img 
-            :src="`${publicPath}404_shrug.png`"
+            :src="`${errorImagePath}404_shrug.png`"
             width="300px"
             >
         </v-img>
@@ -17,7 +17,7 @@
           @click="$router.back()"
           color="primary"
         >
-          Bring me back!@-@
+          Bring me back! @-@
         </v-btn>
       </v-col>
     </v-row>
@@ -25,11 +25,9 @@
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-            publicPath: process.env.BASE_URL
-            }
-        }
-    }
+  export default {
+    data: () => ({
+      errorImagePath: process.env.BASE_URL
+    })
+  }
 </script>
