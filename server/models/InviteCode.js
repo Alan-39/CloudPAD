@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema(
+const InviteCodeSchema = new mongoose.Schema(
     {
         _id: {
             type: String
@@ -12,7 +12,10 @@ const UserSchema = new mongoose.Schema(
             type: String
         }
     },
-    { strict: false }
+    {
+        strict: false, 
+        versionKey: false
+    }
 );
 
-module.exports = User = mongoose.model("invite_code", UserSchema)
+module.exports = InviteCode = mongoose.model("invite_code", InviteCodeSchema)
