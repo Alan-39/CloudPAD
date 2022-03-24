@@ -5,6 +5,7 @@ import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import InviteUsers from '@/views/InviteUsers.vue'
+import UpdatePassword from '@/views/UpdatePassword.vue'
 import AuthenticationService from '@/services/AuthenticationService'
 
 
@@ -46,6 +47,13 @@ const router = new VueRouter({
             component: Register,
             meta: {
                 hideNavigation: true
+            }
+        },
+        {
+            path: '/updatepassword',
+            component: UpdatePassword,
+            meta: {
+                isUpdate: true
             }
         }
     ],
