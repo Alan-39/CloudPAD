@@ -2,7 +2,6 @@
     <v-alert
         v-bind:type="messageType"
         v-bind:max-width="maxWidth"
-        dismissible
     >
     {{ message }}
     </v-alert>
