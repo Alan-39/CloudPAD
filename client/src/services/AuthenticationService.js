@@ -10,6 +10,9 @@ export default {
     logout () {
         return Api().get('auth/logout');
     },
+    update (credentials) {
+        return Api().post('auth/update', credentials);
+    },
     checkAuth () {
         return Api().get('auth/checkAuth');
     }
