@@ -8,7 +8,7 @@ const bucketName = uuidv4();
 
 module.exports = User.findOne({ username: process.env.INIT_ADMIN_USERNAME })
     .then(user => {
-        if (user) console.log("User already exists")
+        if (user) console.log("Admin user already exists")
         else {
             console.log("No user found, creating...")
             let newUser = User({ 
