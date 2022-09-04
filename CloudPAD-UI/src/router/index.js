@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "../stores/auth.store";
 import { useUserStore } from "../stores/user.store";
-import { Access } from "../_helpers/access";
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -15,6 +13,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
+      meta: { loginRequired: true },
       component: () => import("../views/HomeView.vue"),
     },
     /*
@@ -27,26 +26,28 @@ const router = createRouter({
     */
   ],
 });
-export default router;
 
-/*
 router.beforeEach((to, from, next) => {
   // Check if logged in
-  const publicPages = ['/login'];
-  const authRequired = !publicPages.includes(to.path);
-  const auth = useAuthStore();
-
-  if (authRequired && !auth.token) {
-    auth.returnUrl = to.fullPath;
-    return '/login';
-  }
-
-  // Check if user has permission rights
-  const { permissionRequired } = to.meta;
+  const { loginRequired } = to.meta;
+  const token = sessionStorage.getItem('token')
   const currentUser = useUserStore()
 
-  if (permissionRequired.length && !currentUser.hasAccess.includes(permissionRequired)) {
-    return next({ path: '/unauthorized' });
+  if (loginRequired) {
+    if (!token) {
+      // not logged in so redirect to login page with the return url
+      return next({ path: '/login', query: { returnUrl: to.path } });
+    }
+
+    /*
+    // check if route is restricted by role
+    if (authorize.length && !authorize.includes(currentUser.hasAccess)) {
+      // role not authorised so redirect to home page
+      return next({ path: '/' });
+    }
+    */
   }
+
+  next();
 })
-*/
+

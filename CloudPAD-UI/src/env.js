@@ -1,3 +1,3 @@
 export const ENV_VARIABLES = {
-    BACKEND_URL: "http://localhost:4000",
+    BACKEND_URL: "http://localhost:3000",
 }

@@ -1,9 +1,10 @@
-import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
+import { Entity, Unique, ObjectIdColumn, Column } from 'typeorm';
 
 @Entity()
+@Unique(['displayName', 'username'])
 export class User {
   @ObjectIdColumn()
-  id: ObjectID;
+  id: string;
 
   @Column()
   displayName: string;
@@ -15,5 +16,5 @@ export class User {
   password: string;
 
   @Column()
-  hasAccess: Array<string> = [];
+  hasAccess: string[];
 }

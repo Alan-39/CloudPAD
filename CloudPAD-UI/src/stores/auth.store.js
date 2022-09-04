@@ -1,24 +1,32 @@
 import { defineStore } from 'pinia'
+import { authService } from '../services/auth.service';
+import { router } from '../router';
 
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     token: JSON.parse(sessionStorage.getItem('token')),
-    returnUrl: null
+    returnUrl: null,
   }),
   actions: {
-    setSession(token) {
+    async setSession(token) {
+      try {
+        // update pinia state
         this.token = token;
+
+        // store user details and jwt in local storage to keep user logged in between page refreshes
         sessionStorage.setItem('token', JSON.stringify(token));
 
-        // return to previous page or default to homepage
+        // redirect to previous url or default to home page
         router.push(this.returnUrl || '/');
+      } catch (error) {
+        console.log('login error = ', error);
+      }
     },
-    removeSession() {
-        this.token = null;
-        sessionStorage.removeItem('token');
-
-        router.push('/login');
+    logout() {
+      this.token = null;
+      sessionStorage.removeItem('token');
+      router.push('/login');
     }
   }
 })

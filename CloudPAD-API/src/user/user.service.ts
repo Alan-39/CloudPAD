@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ObjectID } from 'typeorm';
-import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
 
 import { RegisterUserDto } from 'src/user/dto/register-user.dto';
-import { LoginUserDto } from 'src/user/dto/login-user.dto';
 
 import * as bcrypt from 'bcrypt';
 
@@ -14,14 +13,6 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-
-  async verify(user: LoginUserDto): Promise<boolean> {
-    const verifyUser = await this.userRepository.findOne({
-      where: { username: user.username },
-    });
-
-    return await bcrypt.compare(user.password, verifyUser.password);
-  }
 
   async create(registerUserDto: RegisterUserDto): Promise<boolean> {
     const isExist = await this.userRepository.findOne({
@@ -41,15 +32,15 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOne(id: ObjectID): Promise<User> {
-    return await this.userRepository.findOne({ where: { id: id } });
+  async findOne(whereParam: Object): Promise<User | undefined> {
+    return await this.userRepository.findOne(whereParam);
   }
 
-  async update(id: ObjectID, user: User): Promise<void> {
+  async update(id: string, user: User): Promise<void> {
     await this.userRepository.update({ id: id }, user);
   }
 
-  async delete(id: ObjectID): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.userRepository.delete({ id: id });
   }
 }

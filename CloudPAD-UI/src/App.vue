@@ -19,10 +19,16 @@
 
 <script setup>
 import { RouterView, useRoute } from "vue-router";
+import { router } from './router';
+import { useAuthStore } from "./stores/auth.store";
+
 import NavBar from "./components/NavBar.vue";
 import SideMenu from "./components/SideMenu.vue";
 
-
+const authStore = useAuthStore();
+if (authStore.user) {
+  router.push('/')
+}
 </script>
 
 <style scoped>
