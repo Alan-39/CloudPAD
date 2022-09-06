@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
+import { MinioModule } from './minio/minio.module';
+import { environment } from './env/environment.constants';
 
 @Module({
   imports: [
@@ -11,13 +13,15 @@ import { UserModule } from './user/user.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: process.env.MONGODB_CONNECTION_STRING || 'localhost',
-      port: 27017,
-      database: process.env.MONGODB_DATABASE || 'cloudpad',
+      host: environment.MONGODB_CONNECTION_STRING,
+      port: environment.MONGODB_PORT,
+      database: environment.MONGODB_DATABASE,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
     }),
     UserModule,
+    MinioModule,
   ],
   providers: [],
+  controllers: [],
 })
 export class AppModule {}
