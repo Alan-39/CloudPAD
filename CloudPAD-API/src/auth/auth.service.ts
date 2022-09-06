@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { env } from '../env/env.constants';
+import { environment } from '../env/environment.constants';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class AuthService {
     if (user && await bcrypt.compare(loginUserDto.password, user.password)) {
       const payload = { displayName: user.displayName, sub: user.id };
       return {
-        token: this.jwtService.sign(payload, { secret: env.JWT_SECRET, expiresIn: '7d' }),
+        token: this.jwtService.sign(payload, { secret: environment.JWT_SECRET, expiresIn: '7d' }),
       };
     }
     throw new HttpException('Incorrect username or password', HttpStatus.NOT_FOUND)
