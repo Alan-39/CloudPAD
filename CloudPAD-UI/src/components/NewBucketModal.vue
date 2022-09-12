@@ -53,6 +53,7 @@ import { Form, Field, useForm } from 'vee-validate';
 import * as yup from 'yup';
 
 const props = defineProps(['showModal']);
+const emit = defineEmits(['close'])
 
 const schema = yup.object({
   bucketName: yup.string().required("Bucket Name is required").min("Bucket Name must be at least 6 characters"),
