@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <Disclosure as="nav" class="bg-sky-800" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-secondary" v-slot="{ open }">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-16">
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
@@ -10,7 +10,7 @@
               src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=500" alt="Workflow" />
             <img class="hidden lg:block h-8 w-auto"
               src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=500" alt="Workflow" />
-            <span class="text-white text-2xl ml-2">CloudPAD</span>
+            <span class="text-gray-700 text-2xl ml-2">CloudPAD</span>
           </div>
           <!-- Logo -->
 
@@ -31,7 +31,7 @@
 
           <!-- Toggle dark mode -->
           <button type="button"
-            class="bg-sky-800 p-1 rounded-full text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-200">
+            class="bg-secondary p-1 rounded-full text-gray-700 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200">
             <span class="sr-only">Dark mode</span>
             <!-- Heroicon name: moon -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -46,11 +46,15 @@
           <Menu as="div" class="ml-3 relative">
             <div>
               <MenuButton
-                class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200">
+                class="bg-secondary flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200">
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt="" />
+                <div class="overflow-hidden relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600">
+                  <svg class="absolute -left-1 w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </div>
               </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100"
@@ -59,11 +63,14 @@
               leave-to-class="transform opacity-0 scale-95">
               <MenuItems
                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <!--
                 <MenuItem v-slot="{ active }">
                 <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
                 </MenuItem>
+                -->
                 <MenuItem v-slot="{ active }">
-                <a href="#" @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+                <a href="#" @click="logout"
+                  :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
                 </MenuItem>
               </MenuItems>
             </transition>

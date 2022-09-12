@@ -1,17 +1,15 @@
 <template>
-  <div class="h-screen flex flex-row bg-gray-200">
-    <div class=" flex-none">
-      <SideMenu v-if="!useRoute().meta.hideNav"></SideMenu>
+  <div class="h-screen flex flex-col bg-primary">
+    <div>
+      <NavBar v-if="!useRoute().meta.hideNav"></NavBar>
     </div>
-    <div class="h-screen flex-1">
-      <div class="h-screen flex flex-col">
+    <div class="grow flex flex-row">
         <div>
-          <NavBar v-if="!useRoute().meta.hideNav"></NavBar>
+          <SideMenu v-if="!useRoute().meta.hideNav"></SideMenu>
         </div>
-        <div class="h-screen flex justify-center items-center">
+        <div class="flex grow justify-center items-center">
           <RouterView></RouterView>
         </div>
-      </div>
     </div>
   </div>
 
