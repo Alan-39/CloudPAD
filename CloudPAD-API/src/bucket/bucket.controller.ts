@@ -8,7 +8,7 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-import { MakebucketDto } from './dto/make-bucket.dto';
+import { MakeBucketDto } from './dto/make-bucket.dto';
 import { BucketService } from './bucket.service';
 
 @Controller('bucket')
@@ -18,7 +18,7 @@ export class BucketController {
   ) { }
 
   @Post('')
-  makeBucket(@Body() makebucketDto: MakebucketDto) {
+  makeBucket(@Body() makebucketDto: MakeBucketDto) {
     return this.bucketService.makeBucket(makebucketDto.bucketName)
     .then(response => {
       console.log('make bucket res = ', response);
