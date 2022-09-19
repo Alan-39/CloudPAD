@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showModal" @click="$emit('close')"
+  <div v-show="showModal" @click="showModal = false"
     class="absolute top-0 bottom-0 right-0 left-0 bg-slate-600 opacity-60 z-49"></div>
 
-  <div v-if="showModal" class="absolute z-20 h-1/2 w-1/2 z-50">
+  <div v-show="showModal" class="absolute z-20 h-1/2 w-1/2 z-50">
     <div class="relative p-4 max-w-2xl">
       <!-- Modal content -->
       <div class="bg-white rounded-lg shadow">
@@ -12,7 +12,7 @@
           <h3 class="text-xl font-semibold text-slate-600">
             New Bucket
           </h3>
-          <button type="button" @click="$emit('close')"
+          <button type="button" @click="showModal = false"
             class="text-slate-600 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -36,10 +36,10 @@
           </div>
 
           <!-- Modal footer -->
-          <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+          <div class="flex justify-end items-center p-4 space-x-2 rounded-b border-t border-gray-200">
             <button type="submit"
               class="text-white bg-accent-dark hover:bg-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
-            <button type="button" @click="$emit('close')"
+            <button type="button" @click="showModal = false"
               class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Cancel</button>
           </div>
         </Form>
@@ -49,22 +49,36 @@
 </template>
   
 <script setup>
+  import { ref } from 'vue';
 import { Form, Field, useForm } from 'vee-validate';
 import * as yup from 'yup';
+import { bucketService } from '../services/bucket.service';
 
-const props = defineProps(['showModal']);
-const emit = defineEmits(['close'])
+defineExpose({
+  open,
+});
+const emit = defineEmits(['close', 'newBucket'])
+const showModal = ref(false);
 
 const schema = yup.object({
-  bucketName: yup.string().required("Bucket Name is required").min("Bucket Name must be at least 6 characters"),
+  bucketName: yup.string().required("Bucket Name is required").min(6, "Bucket Name must be at least 6 characters"),
 });
 
 useForm({
   validationSchema: schema,
 });
 
-async function createBucket(values) {
+function open() {
+  showModal.value = true;
+}
+
+function createBucket(values) {
   console.log('create bucket values = ', values);
+  bucketService.makeBucket(values).then((response) => {
+    console.log('make bucket res = ', response);
+    emit('newBucket', { name: values.bucketName })
+    showModal.value = false;
+  }).catch(err => console.log('make bucket err = ', err.response.data.message));
 }
 
 </script>
