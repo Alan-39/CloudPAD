@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MinioModule as minIOModule } from 'nestjs-minio-client';
-import { MinioController } from './minio.controller';
-import { MinioService } from './minio.service';
+import { BucketController } from './bucket.controller';
+import { BucketService } from './bucket.service';
 import { environment } from '../env/environment.constants';
 
 @Module({
@@ -14,8 +14,8 @@ import { environment } from '../env/environment.constants';
       secretKey: environment.MINIO_SECRET_KEY,
     })
   ],
-  providers: [MinioService],
-  controllers: [MinioController],
-  exports: [MinioService]
+  providers: [BucketService],
+  controllers: [BucketController],
+  exports: [BucketService]
 })
-export class MinioModule { }
+export class BucketModule { }

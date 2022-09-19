@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { MinioModule } from './minio/minio.module';
+import { BucketModule } from './bucket/bucket.module';
 import { environment } from './env/environment.constants';
 
 @Module({
@@ -19,7 +19,7 @@ import { environment } from './env/environment.constants';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
     }),
     UserModule,
-    MinioModule,
+    BucketModule,
   ],
   providers: [],
   controllers: [],
