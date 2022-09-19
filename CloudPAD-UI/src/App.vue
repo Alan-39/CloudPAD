@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex flex-col bg-primary">
+  <div @contextmenu.prevent class="h-screen flex flex-col bg-primary">
     <div>
       <NavBar v-if="!useRoute().meta.hideNav"></NavBar>
     </div>
