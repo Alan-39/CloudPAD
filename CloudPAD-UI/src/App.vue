@@ -1,5 +1,7 @@
 <template>
-  <div @contextmenu.prevent class="h-screen flex flex-col bg-primary">
+  <!-- <div @contextmenu.prevent class="h-screen overflow-hidden flex flex-col bg-primary"> -->
+  <div class="h-screen overflow-hidden flex flex-col bg-primary">
+
     <div>
       <NavBar v-if="!useRoute().meta.hideNav"></NavBar>
     </div>
@@ -7,7 +9,7 @@
         <div>
           <SideMenu v-if="!useRoute().meta.hideNav"></SideMenu>
         </div>
-        <div class="flex grow justify-center items-center">
+        <div class="flex grow h-screen justify-center items-center">
           <RouterView></RouterView>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md">
+  <div class="bg-white cursor-pointer hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md">
     <div class="p-4">
       <div class="flex justify-center text-gray-500">
 

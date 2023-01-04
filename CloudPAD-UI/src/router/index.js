@@ -16,6 +16,12 @@ export const router = createRouter({
       meta: { loginRequired: true },
       component: () => import("../views/HomeView.vue"),
     },
+    {
+      path: "/bucket/:name",
+      name: "bucket",
+      meta: { loginRequired: true },
+      component: () => import("../views/BucketView.vue"),
+    },
     /*
     {
       path: "/admin-dashboard",

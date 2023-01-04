@@ -49,7 +49,7 @@
 </template>
   
 <script setup>
-  import { ref } from 'vue';
+import { ref } from 'vue';
 import { Form, Field, useForm } from 'vee-validate';
 import * as yup from 'yup';
 import { bucketService } from '../services/bucket.service';
@@ -72,11 +72,12 @@ function open() {
   showModal.value = true;
 }
 
-function createBucket(values) {
+function createBucket(values, { resetForm }) {
   console.log('create bucket values = ', values);
   bucketService.makeBucket(values).then((response) => {
     console.log('make bucket res = ', response);
     emit('newBucket', { name: values.bucketName })
+    resetForm();
     showModal.value = false;
   }).catch(err => console.log('make bucket err = ', err.response.data.message));
 }
