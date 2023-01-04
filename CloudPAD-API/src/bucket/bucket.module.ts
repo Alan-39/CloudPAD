@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MinioModule as minIOModule } from 'nestjs-minio-client';
+import { environment } from '../env/environment.constants';
 import { BucketController } from './bucket.controller';
 import { BucketService } from './bucket.service';
-import { environment } from '../env/environment.constants';
 
 @Module({
   imports: [

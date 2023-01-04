@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { BucketModule } from './bucket/bucket.module';
 import { environment } from './env/environment.constants';
+import { ObjectModule } from './object/object.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { environment } from './env/environment.constants';
     }),
     UserModule,
     BucketModule,
+    ObjectModule,
+    AuthModule
   ],
   providers: [],
   controllers: [],
