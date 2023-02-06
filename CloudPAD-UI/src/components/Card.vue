@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white cursor-pointer hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md">
+  <div class="bg-white text-slate-600 cursor-pointer hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md">
     <div class="p-4">
-      <div class="flex justify-center text-gray-500">
+      <div class="flex justify-center">
 
         <svg v-if="iconType === 'folder'" xmlns="http://www.w3.org/2000/svg" width="100" fill="none" viewBox="0 0 24 24"
           strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -21,7 +21,7 @@
 
 
       </div>
-      <h1 class="text-2xl text-center overflow-hidden truncate font-medium text-slate-600 pb-2">{{ name }}</h1>
+      <h1 class="text-2xl text-center overflow-hidden truncate font-medium  pb-2">{{ name }}</h1>
     </div>
   </div>
 </template>

@@ -1,41 +1,44 @@
 <template>
   <div class="overflow-y-scroll p-10 h-full w-full">
-    <div @click="newBucketModal.open()"
-      class="inline-flex items-center cursor-pointer py-1 pl-1 pr-4 mb-6 bg-white hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md text-slate-600">
-      <svg xmlns="http://www.w3.org/2000/svg" width="35" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-        stroke="currentColor" class="w-8 h-8">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-      </svg>
-      <div class="text-xl font-bold font-medium pb-2">New bucket</div>
+    <div class="flex flex-row justify-between">
+      <div @click="newBucketModal.open()"
+        class="inline-flex items-center cursor-pointer py-1 pl-1 pr-4 mb-6 bg-white hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md text-slate-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+          stroke="currentColor" class="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        <div class="text-xl font-bold font-medium pb-2">New bucket</div>
+      </div>
+      <ViewToggle></ViewToggle>
     </div>
 
     <div class="mb-20 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-5">
-      <MediaCard v-for="(bucket, index) in bucketList" @click="selectBucket(index)" @dblclick="openBucket()"
+      <Card v-for="(bucket, index) in bucketList" @click="selectBucket(index)" @dblclick="openBucket()"
         @contextmenu.prevent="openContextMenu($event, index)"
-        :class="{ 'border-2 border-cyan-500': selectedIndex == index }" :name=bucket.name iconType="server">
-      </MediaCard>
+        :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }" :name=bucket.name iconType="server">
+      </Card>
     </div>
   </div>
 
   <NewBucketModal ref="newBucketModal" @close="showModal = false" @newBucket="(b) => bucketList.push(b)">
   </NewBucketModal>
 
-  <GenericPromptModal ref="promptModal" @ok="deleteBucket()">
-  </GenericPromptModal>
+  <OkPromptModal ref="promptModal" @ok="deleteBucket()">
+  </OkPromptModal>
 
   <ContextMenu ref="contextMenu">
     <ul>
       <li @click="openBucket()"
-        class="inline-flex block px-4 py-2 border-b border-gray-200 w-full font-medium hover:bg-red-500 hover:text-gray-100 cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
-          className="w-6 h-6">
+        class="inline-flex block px-4 py-2 border-b border-gray-200 w-full font-medium hover:bg-slate-500 hover:text-slate-100 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+          stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round"
             d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
         </svg>
         <span class="m-1">Open Bucket</span>
       </li>
       <li @click="openDeletePrompt()"
-        class="inline-flex block px-4 py-2 border-b border-gray-200 w-full text-red-500 font-medium hover:bg-red-500 hover:text-gray-100 cursor-pointer">
+        class="inline-flex block px-4 py-2 border-b border-gray-200 w-full text-red-500 font-medium hover:bg-red-500 hover:text-slate-100 cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
           stroke="currentColor" class="stroke-1" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round"
@@ -49,14 +52,15 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-
-import { bucketService } from '../services/bucket.service';
 import { useRouter } from 'vue-router'
 
-import MediaCard from '../components/MediaCard.vue';
+import { bucketService } from '../services/bucket.service';
+
+import Card from '../components/Card.vue';
 import NewBucketModal from '../components/NewBucketModal.vue';
 import ContextMenu from '../components/ContextMenu.vue';
-import GenericPromptModal from '../components/GenericPromptModal.vue';
+import OkPromptModal from '../components/OkPromptModal.vue';
+import ViewToggle from '../components/ViewToggle.vue';
 
 const selectedIndex = ref();
 const bucketList = ref([]);
@@ -97,7 +101,7 @@ function openDeletePrompt() {
 
 function deleteBucket() {
   bucketService.removeBucket(bucketList.value[selectedIndex.value].name)
-    .then((response) => {
+    .then(() => {
       bucketList.value.splice(selectedIndex.value, 1);
     }).catch((err) => console.log('remove bucket error: ', err));
   promptModal.value.close();
