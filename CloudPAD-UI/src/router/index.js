@@ -30,29 +30,31 @@ export const router = createRouter({
       component: () => import("../views/AdminDashboard.vue"),
     },
     */
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      meta: { hideNav: true },
+      component: () => import("../views/NotFound.vue"),
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  // Check if logged in
   const { loginRequired } = to.meta;
   const token = sessionStorage.getItem('token')
   const currentUser = useUserStore()
 
-  if (loginRequired) {
-    if (!token) {
-      // not logged in so redirect to login page with the return url
-      return next({ path: '/login', query: { returnUrl: to.path } });
-    }
+  if (!loginRequired) return next();
+  if (!token) return next({ path: '/login', query: { returnUrl: to.path } });
 
-    /*
-    // check if route is restricted by role
-    if (authorize.length && !authorize.includes(currentUser.hasAccess)) {
-      // role not authorised so redirect to home page
-      return next({ path: '/' });
-    }
-    */
+  /*
+  // check if route is restricted by role
+  if (authorize.length && !authorize.includes(currentUser.hasAccess)) {
+    // role not authorised so redirect to home page
+    return next({ path: '/' });
   }
+  */
+
 
   next();
 })
