@@ -43,8 +43,7 @@ import { HomeIcon, CogIcon } from "@heroicons/vue/solid";
 let isExpanded = ref(true);
 
 const sideNavigation = [
-	{ name: "Home", icon: HomeIcon, href: '#', current: true },
-	{ name: "Settings", icon: CogIcon, href: '#', current: false },
+	{ name: "Home", icon: HomeIcon, href: '/', current: true },
 
 ]
 </script>
