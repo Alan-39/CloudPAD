@@ -5,23 +5,23 @@ import { MinioService as minIOService } from 'nestjs-minio-client';
 export class ObjectService {
   constructor(private readonly minioService: minIOService) { }
 
-  async uploadObject() {
-
+  async uploadObject(bucketName: string, objectName: string, stream: any) {
+    return await this.minioService.client.putObject(bucketName, objectName, stream);
   }
 
   listObjects(bucketName: string) {
-    return this.minioService.client.listObjects(bucketName)
+    return this.minioService.client.listObjects(bucketName);
   }
   
-  async downloadObject() {
-
+  async getObject(bucketName: string, objectName: string) {
+    return await this.minioService.client.presignedGetObject(bucketName, objectName, 24*60*60);
   }
 
   async getObjectStat() {
 
   }
 
-  async removeObject() {
-
+  async removeObject(bucketName, objectName) {
+    return await this.minioService.client.removeObject(bucketName, objectName);
   }
 }
