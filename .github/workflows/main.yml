@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: cloudpad-nest           # set this to your Amazon ECR repository name
-  ECR_REGISTRY: public.ecr.aws/f2o0p5n8/
+  ECR_REGISTRY: public.ecr.aws/f2o0p5n8
   IMAGE_TAG: latest
   ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   ECS_CLUSTER: cloudpad-cluster                 # set this to your Amazon ECS cluster name
