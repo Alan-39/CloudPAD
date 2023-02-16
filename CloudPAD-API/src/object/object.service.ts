@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { MinioService as minIOService } from 'nestjs-minio-client';
+import { MinioService } from 'nestjs-minio-client';
 
 @Injectable()
 export class ObjectService {
-  constructor(private readonly minioService: minIOService) { }
+  constructor(private readonly minioService: MinioService) { }
 
   async uploadObject(bucketName: string, objectName: string, stream: any) {
     return await this.minioService.client.putObject(bucketName, objectName, stream);
