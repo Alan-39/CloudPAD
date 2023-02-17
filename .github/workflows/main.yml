@@ -6,13 +6,18 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: cloudpad-nest           # set this to your Amazon ECR repository name
-  
+  ECR_REPOSITORY: cloudpad-nest                # set this to your Amazon ECR repository name
+  ECS_SERVICE: cloudpad-service                # set this to your Amazon ECS service name
+  ECS_CLUSTER: cloudpad-cluster-1              # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: cloudpad-image          # set this to the path to your Amazon ECS task definition
+                                               # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: cloudpad-nest                # set this to the name of the container in the
+                                               # containerDefinitions section of your task definition 
 permissions:
   contents: read
   
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     environment: production
 
@@ -38,6 +43,29 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         cd CloudPAD-API
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "${{ secrets.ENV_FILE }}" > .env
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Download task definition
+      run: |
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} \
+          --query taskDefinition > task-definition.json
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
