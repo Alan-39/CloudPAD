@@ -13,30 +13,23 @@
       </div>
 
       <!-- Todo: Toggling between grid and list view  -->
-      <ViewToggle></ViewToggle>
+      <ViewToggle page="object"></ViewToggle>
     </div>
 
     <!-- Object view -->
-    <div>
-      <div v-if="objectList" class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left text-slate-600">
-          <tbody>
-            <tr 
-              v-for="(item, index) in objectList"
-              @click="selectItem(index)"
-              @contextmenu.prevent="openContextMenu($event, index)"
-              class="bg-white rounded cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
-              :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }"
-            >
-              <td v-for="value in item" class="px-6 py-4">
-                {{ value }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <h1 v-else>I'm feeling empty here...</h1>
+    <div v-if="objectList">
+      <table class="w-full text-sm text-left text-slate-600">
+        <tr v-for="(item, index) in objectList" @click="selectItem(index)"
+          @contextmenu.prevent="openContextMenu($event, index)"
+          class="bg-white rounded cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+          :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }">
+          <td v-for="value in item" class="px-6 py-4">
+            {{ value }}
+          </td>
+        </tr>
+      </table>
     </div>
+    <h1 v-else>I'm feeling empty here...</h1>
     <!-- Object view -->
 
     <!-- Todo: multi file upload dialog  -->
@@ -117,10 +110,10 @@ async function uploadFile(e) {
     formdata.append('file', e.target.files[i]);
     requests.push(objectService.uploadObject(formdata));
     Promise.allSettled(requests)
-      .then((results) => results.forEach((result) => { 
+      .then((results) => results.forEach((result) => {
         console.log('result: ', result.value.data);
         objectList.value.push(result.value.data);
-    }));
+      }));
   }
 }
 

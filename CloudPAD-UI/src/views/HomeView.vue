@@ -9,15 +9,32 @@
         </svg>
         <div class="text-xl font-bold font-medium pb-2">New bucket</div>
       </div>
-      <ViewToggle></ViewToggle>
+      <ViewToggle page="bucket"></ViewToggle>
     </div>
 
+    <!-- Grid view -->
     <div class="mb-20 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-5">
       <Card v-for="(bucket, index) in bucketList" @click="selectBucket(index)" @dblclick="openBucket()"
         @contextmenu.prevent="openContextMenu($event, index)"
         :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }" :name=bucket.name iconType="server">
       </Card>
     </div>
+    <!-- Grid view -->
+
+    <!-- List view -->
+    <!--
+    <table class="w-full text-sm text-left text-slate-600">
+      <tr v-for="(bucket, index) in bucketList" @click="selectBucket(index)"
+        @contextmenu.prevent="openContextMenu($event, index)"
+        class="bg-white rounded cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+        :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }">
+        <td v-for="value in bucket" class="px-6 py-4">
+          {{ value }}
+        </td>
+      </tr>
+    </table>
+    -->
+    <!-- List view -->
   </div>
 
   <NewBucketModal ref="newBucketModal" @close="showModal = false" @newBucket="(b) => bucketList.push(b)">
