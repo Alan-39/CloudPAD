@@ -33,13 +33,15 @@ export class BucketController {
   }
 
   @Get('')
-  async listBuckets() {
-    let userBuckets = await this.bucketService.listBuckets();
-    userBuckets.forEach(obj => {
-      obj.name = obj.name.split('.')[1];
+  async listBuckets(@Request() req) {
+    const userBuckets = await this.bucketService.listBuckets();
+    const result = userBuckets.filter(obj => {
+      const userObj = obj.name.split('.');
+      if (req.user.id == userObj[0]) {
+        return obj.name = userObj[1];
+      }
     })
-    console.log('userbuckets: ', userBuckets);
-    return userBuckets
+    return result;
   }
 
   @Delete('/:name')
