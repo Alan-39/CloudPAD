@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MinioModule } from 'nestjs-minio-client';
+
 import { UserModule } from './user/user.module';
 import { BucketModule } from './bucket/bucket.module';
 import { ObjectModule } from './object/object.module';
 import { AuthModule } from './auth/auth.module';
-import { MinioModule } from 'nestjs-minio-client';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -39,7 +41,8 @@ import { MinioModule } from 'nestjs-minio-client';
     UserModule,
     BucketModule,
     ObjectModule,
-    AuthModule
+    AuthModule,
+    TokenModule,
   ],
   providers: [],
   controllers: [],
