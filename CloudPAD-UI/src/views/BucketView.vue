@@ -11,10 +11,9 @@
         <input type="file" ref="fileUpload" @change="uploadFile($event)" hidden multiple />
         <div class="text-xl font-bold font-medium pb-2">Upload</div>
       </div>
-
-      <!-- Todo: Toggling between grid and list view  -->
-      <ViewToggle page="object"></ViewToggle>
     </div>
+
+    <Breadcrumb></Breadcrumb>
 
     <!-- Object view -->
     <div v-if="objectList">
@@ -56,8 +55,7 @@ import { onMounted, ref } from 'vue';
 import { objectService } from '../services/object.service';
 
 import ContextMenu from '../components/ContextMenu.vue';
-import ViewToggle from '../components/ViewToggle.vue';
-
+import Breadcrumb from '../components/Breadcrumb.vue';
 
 const route = useRoute()
 
@@ -86,8 +84,8 @@ function openContextMenu(e, idx) {
 
 function downloadObject() {
   objectService.downloadObject(objectList.value[selectedIndex.value].name, route.params.name)
-    .then(url => {
-      window.open(url.data);
+    .then(response => {
+      window.open(response.data);
     }).catch((err) => console.log('download object err: ', err));
 }
 
@@ -111,7 +109,6 @@ async function uploadFile(e) {
     requests.push(objectService.uploadObject(formdata));
     Promise.allSettled(requests)
       .then((results) => results.forEach((result) => {
-        console.log('result: ', result.value.data);
         objectList.value.push(result.value.data);
       }));
   }

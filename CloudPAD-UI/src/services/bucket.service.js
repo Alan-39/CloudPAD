@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ENV_VARIABLES } from '../env';
 import authHeader from './auth-header';
 
@@ -9,13 +8,35 @@ export const bucketService = {
 }
 
 async function makeBucket(data) {
-  return await axios.post(`${ENV_VARIABLES.BACKEND_URL}/bucket`, data, { headers: authHeader() });
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/bucket`, {
+    method: 'POST',
+    headers: {
+      "Authorization": authHeader(),
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data),
+  });
+  return { status: res.status, data: await res.json() };
 }
 
 async function listBuckets() {
-  return await axios.get(`${ENV_VARIABLES.BACKEND_URL}/bucket`, { headers: authHeader() });
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/bucket`, {
+    method: 'GET',
+    headers: {
+      "Authorization": authHeader(),
+      "Content-Type": "application/json"
+    },
+  });
+  return { status: res.status, data: await res.json() };
 }
 
 async function removeBucket(name) {
-  return await axios.delete(`${ENV_VARIABLES.BACKEND_URL}/bucket/${name}`, { headers: authHeader() });
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/bucket/${name}`, {
+    method: 'DELETE',
+    headers: {
+      "Authorization": authHeader(),
+      "Content-Type": "application/json"
+    },
+  });
+  return { status: res.status, data: await res.json() };
 }

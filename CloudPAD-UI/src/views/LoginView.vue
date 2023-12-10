@@ -29,7 +29,7 @@
       </div>
       -->
       <button
-        class="w-full flex justify-center text-white hover:text-gray-700 bg-accent-dark hover:bg-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center ease-in-out duration-300">
+        class="w-full flex justify-center text-white hover:text-gray-700 bg-info-dark hover:bg-info focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center ease-in-out duration-300">
         <svg v-if="isLoading" class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
           viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -68,11 +68,12 @@ async function login(values) {
   const authStore = useAuthStore();
 
   try {
-    const response = await authService.login(values);
     errMsg.value = '';
-    authStore.setSession(response.data.token)
-  } catch(err) {
-    errMsg.value = err.response.data.message
+    const res = await authService.login(values);
+    res.status == 201 ? authStore.setSession(res.data.token) : errMsg.value = res.data.message;
+  } catch (err) {
+    console.log(err)
+    errMsg.value = err.res.message
   } finally {
     isLoading.value = false;
   }
@@ -80,5 +81,4 @@ async function login(values) {
 </script>
 
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ENV_VARIABLES } from '../env';
 import authHeader from './auth-header';
 
@@ -10,17 +9,43 @@ export const objectService = {
 }
 
 async function listObject(bucketName) {
-  return await axios.get(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}`, { headers: authHeader() });
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}`, {
+    method: 'GET',
+    headers: {
+      "Authorization": authHeader(),
+      "Content-Type": "application/json"
+    },
+  });
+  return { status: res.status, data: await res.json() };
 }
 
-function uploadObject(formData) {
-  return axios.post(`${ENV_VARIABLES.BACKEND_URL}/object/upload`, formData, { headers: authHeader() });
+async function uploadObject(data) {
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/object/upload`, {
+    method: 'POST',
+    headers: {
+      "Authorization": authHeader(),
+    },
+    body: data,
+  });
+  return { status: res.status, data: await res.json() };
 }
 
-async function downloadObject(objectName, bucketName) {
-  return await axios.get(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}/${objectName}`, { headers: authHeader() });
+async function downloadObject(objectName, bucketName) {  
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}/${objectName}`, {
+    method: 'GET',
+    headers: {
+      "Authorization": authHeader(),
+    },
+  });
+  return { data: await res.text() };
 }
 
 async function deleteObject(objectName, bucketName) {
-  return await axios.delete(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}/${objectName}`, { headers: authHeader() });
+  const res = await fetch(`${ENV_VARIABLES.BACKEND_URL}/object/${bucketName}/${objectName}`, {
+    method: 'DELETE',
+    headers: {
+      "Authorization": authHeader(),
+    },
+  });
+  return { status: res.status, data: await res.json() };
 }
