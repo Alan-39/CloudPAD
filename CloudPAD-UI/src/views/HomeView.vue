@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-y-scroll p-10 h-full w-full">
     <div class="flex flex-row justify-between">
-      <div @click="newBucketModal.open()"
+      <div @click="openNewModal()"
         class="inline-flex items-center cursor-pointer py-1 pl-1 pr-4 mb-6 bg-white hover:bg-gray-300 ease-in-out duration-300 rounded-2xl shadow-md text-slate-600">
         <svg xmlns="http://www.w3.org/2000/svg" width="35" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
           stroke="currentColor" class="w-8 h-8">
@@ -9,8 +9,9 @@
         </svg>
         <div class="text-xl font-bold font-medium pb-2">New bucket</div>
       </div>
-      <ViewToggle page="bucket"></ViewToggle>
     </div>
+
+    <Breadcrumb></Breadcrumb>
 
     <!-- Grid view -->
     <div class="mb-20 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-5">
@@ -22,26 +23,26 @@
     <!-- Grid view -->
 
     <!-- List view -->
-    <!--
-    <table class="w-full text-sm text-left text-slate-600">
-      <tr v-for="(bucket, index) in bucketList" @click="selectBucket(index)"
-        @contextmenu.prevent="openContextMenu($event, index)"
-        class="bg-white rounded cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
-        :class="{ 'bg-gray-500 text-slate-300': selectedIndex == index }">
-        <td v-for="value in bucket" class="px-6 py-4">
-          {{ value }}
-        </td>
-      </tr>
-    </table>
-    -->
     <!-- List view -->
   </div>
 
-  <NewBucketModal ref="newBucketModal" @close="showModal = false" @newBucket="(b) => bucketList.push(b)">
-  </NewBucketModal>
+  <Modal ref="newModal" @true="newBucket" @false="">
+    <form class="space-y-6" @submit.prevent="newBucket">
+      <div class="space-y-6">
+        <div>
+          <label for="bucketName" class="block mb-2 text-sm font-medium text-gray-700 ">Bucket Name</label>
+          <input id="bucketName" v-model="bucketForm.bucketName" name="bucketName" type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            required />
+          <span class="text-sm text-red-600">{{ errors }}</span>
+        </div>
+      </div>
+    </form>
+  </Modal>
 
-  <OkPromptModal ref="promptModal" @ok="deleteBucket()">
-  </OkPromptModal>
+  <Modal ref="deleteModal" @true="deleteBucket()">
+    <p class="font-medium text-slate-600">This action cannot be reversed. Are you sure?</p>
+  </Modal>
 
   <ContextMenu ref="contextMenu">
     <ul>
@@ -54,7 +55,7 @@
         </svg>
         <span class="m-1">Open Bucket</span>
       </li>
-      <li @click="openDeletePrompt()"
+      <li @click="openDeleteModal()"
         class="inline-flex block px-4 py-2 border-b border-gray-200 w-full text-red-500 font-medium hover:bg-red-500 hover:text-slate-100 cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
           stroke="currentColor" class="stroke-1" className="w-6 h-6">
@@ -69,22 +70,24 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import * as yup from 'yup';
 
 import { bucketService } from '../services/bucket.service';
 
 import Card from '../components/Card.vue';
-import NewBucketModal from '../components/NewBucketModal.vue';
 import ContextMenu from '../components/ContextMenu.vue';
-import OkPromptModal from '../components/OkPromptModal.vue';
-import ViewToggle from '../components/ViewToggle.vue';
+import Modal from '../components/Modal.vue';
+import Breadcrumb from '../components/Breadcrumb.vue';
 
 const selectedIndex = ref();
 const bucketList = ref([]);
+const bucketForm = ref({ bucketName: '' });
+const errors = ref('');
 
-const newBucketModal = ref(null);
+const newModal = ref(null);
 const contextMenu = ref(null)
-const promptModal = ref(null);
+const deleteModal = ref(null);
 
 const router = useRouter()
 
@@ -107,23 +110,48 @@ function openBucket() {
   router.push(`/bucket/${bucketList.value[selectedIndex.value].name}`)
 }
 
-function openDeletePrompt() {
-  contextMenu.value.close();
-  const promptMessage = {
-    title: 'Delete bucket',
-    message: 'This action cannot be reverse. Are you sure?',
-  }
-  promptModal.value.open(promptMessage);
-}
-
 function deleteBucket() {
   bucketService.removeBucket(bucketList.value[selectedIndex.value].name)
     .then(() => {
       bucketList.value.splice(selectedIndex.value, 1);
     }).catch((err) => console.log('remove bucket error: ', err));
-  promptModal.value.close();
+  deleteModal.value.close();
 }
 
+async function newBucket() {
+  const bucketSchema = yup.object({
+    bucketName: yup.string().required("Bucket Name is required").min(6, "Bucket Name must be at least 6 characters"),
+  });
+
+  try {
+    await bucketSchema.validate(bucketForm.value);
+    await bucketService.makeBucket(bucketForm.value);
+    listBuckets();
+    newModal.value.close();
+  } catch (err) {
+    console.log(err);
+    errors.value = err.errors.join('\n');
+  }
+
+}
+
+function openDeleteModal() {
+  contextMenu.value.close();
+  deleteModal.value.open({
+    title: "Delete Bucket",
+    action: "Delete",
+    actionColor: "warning",
+  });
+}
+
+function openNewModal() {
+  contextMenu.value.close();
+  newModal.value.open({
+    title: "New Bucket",
+    action: "Create",
+    actionColor: "info",
+  });
+}
 
 function openContextMenu(e, idx) {
   selectedIndex.value = idx;

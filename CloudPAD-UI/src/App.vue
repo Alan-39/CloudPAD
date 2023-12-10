@@ -6,15 +6,11 @@
       <NavBar v-if="!useRoute().meta.hideNav"></NavBar>
     </div>
     <div class="grow flex flex-row">
-        <div>
-          <SideMenu v-if="!useRoute().meta.hideNav"></SideMenu>
-        </div>
-        <div class="flex grow h-screen justify-center items-center">
-          <RouterView></RouterView>
-        </div>
+      <div class="flex grow h-screen justify-center items-center">
+        <RouterView></RouterView>
+      </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
@@ -23,7 +19,6 @@ import { RouterView, useRoute } from "vue-router";
 //import { useAuthStore } from "./stores/auth.store";
 
 import NavBar from "./components/NavBar.vue";
-import SideMenu from "./components/SideMenu.vue";
 
 /* unused code
 const authStore = useAuthStore();

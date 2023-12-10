@@ -22,14 +22,6 @@ export const router = createRouter({
       meta: { loginRequired: true },
       component: () => import("../views/BucketView.vue"),
     },
-    /*
-    {
-      path: "/admin-dashboard",
-      name: "admin-dashboard",
-      meta: { permissionRequired: Access.AdminDashboard },
-      component: () => import("../views/AdminDashboard.vue"),
-    },
-    */
     {
       path: "/:pathMatch(.*)*",
       name: "not-found",
